@@ -9,18 +9,33 @@ import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
 class workerThreadTask extends Thread{
+	private int Niterations;
+
+	public workerThreadTask(int Niterations)
+	{
+		this.Niterations=Niterations;
+	}
+
 	public void run()
 	{
 		Random rand = new Random();
-		double x = rand.nextDouble();
-		double y = rand.nextDouble();
-		//System.out.println(x+" "+y);
+		int localCirclePointsCount = 0;
+		int localSquarePointCount =0;
+		while(Niterations>0)
+		{
+			double x = rand.nextDouble();
+			double y = rand.nextDouble();
+			//System.out.println(x+" "+y);
 
-		double d=x*x+y*y;
-		if(d<=1)
-			MonteCarloSimulation.circlePointsCount.incrementAndGet();
+			double d=x*x+y*y;
+			if(d<=1)
+				localCirclePointsCount++;
+			localSquarePointCount++;
+			Niterations--;
+		}
 
-		MonteCarloSimulation.squarePointsCount.incrementAndGet();
+		MonteCarloSimulation.circlePointsCount.getAndAdd(localCirclePointsCount);
+		MonteCarloSimulation.squarePointsCount.getAndAdd(localSquarePointCount);
 	}
 }
 
@@ -76,9 +91,12 @@ class MonteCarloSimulation{
 
 		ExecutorService taskExecutorService = Executors.newFixedThreadPool(Nthreads);
 
-		for(int i=1;i<=Npoints;i++)
+		int perThreaditerations = (Npoints+Nthreads-1)/Nthreads;
+
+		for(int i=0;i<Nthreads;i++)
 		{
-			taskExecutorService.submit(new workerThreadTask());
+			int numIterations = Math.min((i+1)*perThreaditerations,Npoints) - i*perThreaditerations;
+			taskExecutorService.submit(new workerThreadTask(numIterations));
 		}
 
 		taskExecutorService.shutdown();
@@ -92,7 +110,7 @@ class MonteCarloSimulation{
 
 		double PI = (4*circlePointsCount.doubleValue())/squarePointsCount.doubleValue();
 
-		System.out.println("The Estimated Value of PI is:"+PI);
+		System.out.println("The Estimated Value of PI is: "+PI);
 	}
 }
 
