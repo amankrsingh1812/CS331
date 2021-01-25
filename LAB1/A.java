@@ -44,18 +44,6 @@ class MonteCarloSimulation{
 	public static AtomicInteger squarePointsCount;
 	private static final int Npoints = 1000000;
 
-	private static void setFileOutput()
-	{
-		PrintStream o;
-		try {
-			o = new PrintStream(new File("Logs.txt"));
-			System.setOut(o);
-			System.setErr(o);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private static int stringToInt(String s)
 	{
 		if(s.length() > 2)
@@ -72,7 +60,6 @@ class MonteCarloSimulation{
 	}
 	public static void main(String args[])
 	{
-		//setFileOutput();
 		if(args.length != 1)
 		{
 			System.out.println("Please Enter Valid Number of arguments!!");

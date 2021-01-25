@@ -3,6 +3,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 class rowComputeTask extends Thread{
 	private int row;
@@ -71,7 +74,6 @@ class MatrixMultiplication{
 	public static int B[][];
 	public static int C[][];
 	private static ExecutorService matrixMultiplicationExecutor;
-	private static ExecutorService matrixInitialiserExecutor;
 
 	private static int stringToInt(String s)
 	{
@@ -94,27 +96,56 @@ class MatrixMultiplication{
 		B = new int[N][N];
 		C = new int[N][N];
 
-		int perThreadRows = MatrixMultiplication.N/Nthreads;
+		int perThreadRows = (MatrixMultiplication.N+Nthreads-1)/Nthreads;
 		for(int i=0;i<Nthreads;i++)
-			matrixInitialiserExecutor.submit(new initialiseTask(i*perThreadRows,Math.min((i+1)*perThreadRows,MatrixMultiplication.N)));
-		//Random rand = new Random();
+			matrixMultiplicationExecutor.submit(new initialiseTask(i*perThreadRows,Math.min((i+1)*perThreadRows,MatrixMultiplication.N)));
+	}
 
-		//for(int i=0;i<N;i++)
-			//for(int j=0;j<N;j++)
-			//{
-				////matrixMultiplicationExecutor.submit(new initialiseTask(i,j));
-				//C[i][j]=0;
-				//A[i][j]=rand.nextInt(11);
-				//B[i][j]=rand.nextInt(11);
-			//}
+	public static void outputFile()
+	{
+		PrintStream o;
+        try {
+            o = new PrintStream(new File("MultiplicationOutput.txt"));
+            System.setOut(o);
+            System.setErr(o);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+		for(int i=0;i<N;i++)
+		{
+			for(int j=0;j<N;j++)
+			{
+				System.out.print(C[i][j]+" ");
+		
+				//for(int k=0;k<N;k++)
+					//C[i][j]-=A[i][k]*B[k][j];
+
+				//if(C[i][j]!=0)
+				//System.out.println("Error at "+i+" "+j);
+			}
+			System.out.println("");
+		}
 	}
 
 	public static void main(String args[])
 	{
-		if(args.length != 1)
+		boolean fileOP = false;
+		if(args.length != 1 && args.length != 2)
 		{
 			System.out.println("Please Enter Valid Number of arguments!!");
 			System.exit(1);
+		}
+		if(args.length == 2)
+		{
+			int tval = stringToInt(args[1]);
+			if(tval <0 || tval > 1)
+			{
+				System.out.println("Please Enter Valid Flags!!");
+				System.exit(1);
+			}
+			if(tval == 1)
+				fileOP = true;
 		}
 		int Nthreads = stringToInt(args[0]);
 
@@ -124,11 +155,11 @@ class MatrixMultiplication{
 			System.exit(1);
 		}
 
-		matrixInitialiserExecutor = Executors.newFixedThreadPool(Nthreads);
+		matrixMultiplicationExecutor = Executors.newFixedThreadPool(Nthreads);
 		intialise(Nthreads);
-		matrixInitialiserExecutor.shutdown();
+		matrixMultiplicationExecutor.shutdown();
 		try {
-			matrixInitialiserExecutor.awaitTermination(90, TimeUnit.SECONDS);
+			matrixMultiplicationExecutor.awaitTermination(90, TimeUnit.SECONDS);
 		}
 		catch (InterruptedException e){
 			System.out.println("Fatal Error, Please run again!!");
@@ -139,7 +170,6 @@ class MatrixMultiplication{
 		matrixMultiplicationExecutor = Executors.newFixedThreadPool(Nthreads);
 
 		for(int i=0;i<N;i++)
-			//for(int j=0;j<N;j++)
 			matrixMultiplicationExecutor.submit(new rowComputeTask(i));
 
 		matrixMultiplicationExecutor.shutdown();
@@ -151,15 +181,8 @@ class MatrixMultiplication{
 			System.exit(1);
 		}
 
-		//for(int i=0;i<N;i++)
-		//for(int j=0;j<N;j++)
-		//{
-		//for(int k=0;k<N;k++)
-		//C[i][j]+=A[i][k]*B[k][j];
-
-		////if(C[i][j]!=0)
-		////System.out.println("Error at "+i+" "+j);
-		//}
+		if(fileOP)
+			outputFile();
 
 	}
 }
