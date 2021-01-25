@@ -36,7 +36,6 @@ class workerThreadTask extends Thread {
 			Niterations--;
 		}
 
-		System.out.println(localCirclePointsCount);
 		// Update global counters
 		MonteCarloSimulation.circlePointsCount.getAndAdd(localCirclePointsCount);
 		MonteCarloSimulation.squarePointsCount.getAndAdd(localSquarePointCount);
@@ -46,7 +45,7 @@ class workerThreadTask extends Thread {
 class MonteCarloSimulation {
 	public static AtomicInteger circlePointsCount; // Global counter of Points inside circle
 	public static AtomicInteger squarePointsCount; // Global counter of total number of Points generated
-	private static final int Npoints = 100000000; // Total Number of Points to be tested
+	private static final int Npoints = 1000000; // Total Number of Points to be tested
 
 	// Helper function to convert String to Int. Return -1 in case of wrong input
 	private static int stringToInt(String s) {

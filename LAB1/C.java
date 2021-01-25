@@ -21,8 +21,7 @@ class rowComputeTask extends Thread {
 		// Runs in O(N*N)
 		for (int column = 0; column < MatrixMultiplication.N; column++) {
 			for (int j = 0; j < MatrixMultiplication.N; j++)
-				MatrixMultiplication.C[row][column] += MatrixMultiplication.A[row][j]
-						* MatrixMultiplication.B[j][column];
+				MatrixMultiplication.C[row][column] += MatrixMultiplication.A[row][j]* MatrixMultiplication.B[j][column];
 		}
 	}
 }
@@ -105,6 +104,7 @@ class MatrixMultiplication {
 
 	public static void main(String args[]) {
 		boolean fileOP = false;
+		long executionTime = System.currentTimeMillis(); //Used to track time of execution
 
 		// Valid Input argument checks
 		if (args.length != 2) {
@@ -161,5 +161,7 @@ class MatrixMultiplication {
 		if (fileOP)
 			outputFile();
 
+		executionTime = System.currentTimeMillis() - executionTime;
+		System.out.println("Program executed Successfully in "+executionTime+" ms");
 	}
 }
