@@ -8,6 +8,7 @@ PART B:
 
 PART C:
 1. To compile use the command "javac -d . C.java"
-2. To run use the command "" where Nthreads is required number of threads(range 4-16) and Flag(0 or 1) is an integer indicating whether to write the Matrices A, B, C in a file. 
+2. To run use the command "java PartC.MatrixMultiplication Nthreads Flag" where Nthreads is required number of threads(range 4-16).
+   Flag(0 or 1) is an integer indicating whether to write the Matrices A, B, C in a file. 
    Passing flag as 1 increases the runtime of program due to the slow FILE I/O. 
-   Example Command to run:- 
+   Example Command to run:- java PartC.MatrixMultiplication 4 0

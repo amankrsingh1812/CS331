@@ -56,8 +56,9 @@ class MatrixMultiplication {
 	public static int A[][];
 	public static int B[][];
 	public static int C[][]; // Result Matrix
-	private static ExecutorService matrixMultiplicationExecutor;
+	private static ExecutorService matrixMultiplicationExecutor; // Executor Service for thread pool
 
+	// Helper function to convert String to Int. Return -1 in case of wrong input
 	private static int stringToInt(String s) {
 		if (s.length() > 2)
 			return -1;
@@ -71,6 +72,7 @@ class MatrixMultiplication {
 		return ans;
 	}
 
+	// Function to Initialise the matrices
 	private static void intialise(int Nthreads) {
 		A = new int[N][N];
 		B = new int[N][N];
@@ -103,21 +105,22 @@ class MatrixMultiplication {
 
 	public static void main(String args[]) {
 		boolean fileOP = false;
-		if (args.length != 1 && args.length != 2) {
+
+		// Valid Input argument checks
+		if (args.length != 2) {
 			System.out.println("Please Enter Valid Number of arguments!!");
 			System.exit(1);
 		}
-		if (args.length == 2) {
-			int tval = stringToInt(args[1]);
-			if (tval < 0 || tval > 1) {
-				System.out.println("Please Enter Valid Flags!!");
-				System.exit(1);
-			}
-			if (tval == 1)
-				fileOP = true;
+		int tval = stringToInt(args[1]);
+		if (tval < 0 || tval > 1) {
+			System.out.println("Please Enter Valid Flags!!");
+			System.exit(1);
 		}
+		if (tval == 1)
+			fileOP = true;
 		int Nthreads = stringToInt(args[0]);
 
+		// Number of Threads Check
 		if (Nthreads < 4 || Nthreads > 16) {
 			System.out.println("Please Enter Valid Number of Threads!!");
 			System.exit(1);
@@ -140,10 +143,12 @@ class MatrixMultiplication {
 		// Create fixed size thread pool for multiplication
 		matrixMultiplicationExecutor = Executors.newFixedThreadPool(Nthreads);
 
-		// 
+		// Compute the result Matrix row by row
+		// Submit computation each row to a seperate thread
 		for (int i = 0; i < N; i++)
 			matrixMultiplicationExecutor.submit(new rowComputeTask(i));
 
+		// Wait for task of all threads to complete
 		matrixMultiplicationExecutor.shutdown();
 		try {
 			matrixMultiplicationExecutor.awaitTermination(90, TimeUnit.SECONDS);
@@ -152,6 +157,7 @@ class MatrixMultiplication {
 			System.exit(1);
 		}
 
+		// Write Result Matrix to file if flag is passed as 1
 		if (fileOP)
 			outputFile();
 
