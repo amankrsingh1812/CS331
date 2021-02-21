@@ -93,7 +93,21 @@ class MatrixMultiplication {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
+		System.out.println("Contents of Matrix A are:");
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				System.out.print(A[i][j] + " ");
+			}
+			System.out.println("");
+		}
+		System.out.println("Contents of Matrix B are:");
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				System.out.print(B[i][j] + " ");
+			}
+			System.out.println("");
+		}
+		System.out.println("Contents of Matrix C are:");
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				System.out.print(C[i][j] + " ");
