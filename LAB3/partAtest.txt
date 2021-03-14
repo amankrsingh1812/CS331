@@ -1,0 +1,10 @@
+cusSqrt 2500
+cusSqrt 2132.36482
+cusSqrt 5435
+cusSqrt 1600
+cusSqrt 81
+cusSqrt 133.3421
+cusSqrt 54685.235978
+cusSqrt 72841.27
+cusSqrt 12374
+cusSqrt 42321.132332

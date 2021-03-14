@@ -1,0 +1,10 @@
+fib 43
+fib 200
+fib 33
+fib 433
+fib 342
+fib 877
+fib 954
+fib 621
+fib 1000
+fib 263
