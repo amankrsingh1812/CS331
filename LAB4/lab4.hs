@@ -1,3 +1,5 @@
+-- Part A
+testfunc :: Integer -> IO [Integer]
 testfunc y = do
     {x <- getChar;
      if x == '\n'
@@ -13,13 +15,15 @@ testfunc y = do
             return  xs
     }
 
-charToInt y = (read :: String -> Int) y
+charToInt y = (read :: String -> Integer) y
 
 getList = do
             x <- testfunc 0
             return x
 
 
+-- Part B
+gcdn :: Integer -> Integer -> Integer
 gcdn a b
          | a == 0 = b
          | b == 0 = a
@@ -27,11 +31,12 @@ gcdn a b
          | a > b = gcdn b (a `rem` b)
          | b > a = gcdn a (b `rem` a)
 
-
+lcmn :: [Integer] -> Integer
 lcmn [] = 1
 lcmn ( x : xs ) = (x * l) `div` (gcdn x l) where l = lcmn xs
 
 
+-- Part C
 data Tree a = Nil | Node (Tree a) a (Tree a) deriving Show
 
 insert Nil x = Node Nil x Nil
@@ -55,3 +60,12 @@ postorder (Node lst v rst) = postorder (lst) ++ postorder (rst) ++ [v]
 inorder Nil = []
 inorder (Node lst v rst) = inorder (lst) ++ [v] ++ inorder (rst)
 
+-- main function
+main = do
+         inp <- getList;
+         putStrLn ("PartA: The input array is " ++ show(inp));
+         putStrLn ("PartB: The lcm of all numbers is " ++ show(lcmn (inp)));
+         let tree = makeTree (inp);
+         putStrLn ("PartC: The inorder traversl is " ++ show(inorder (tree)))
+         putStrLn ("PartC: The preorder traversl is " ++ show(preorder (tree)))
+         putStrLn ("PartC: The postorder traversl is " ++ show(postorder (tree)))
