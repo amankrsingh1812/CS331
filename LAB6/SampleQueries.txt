@@ -1,0 +1,20 @@
+1. shortest_path(1,99,Result).
+
+2. shortest_path(13,73,Result).
+
+3. shortest_path(1,41,Result).
+   removefaultynode(31).
+   shortest_path(1,41,Result).
+   addfaultynode(31).
+
+4. shortest_path(36,46,Result).
+
+5. shortest_path(59,55,Result).
+   addfaultynode(56).
+   shortest_path(59,55,Result).
+   removefaultynode(56).
+
+6. shortest_path(53,71,Result).
+   addfaultynode(72).
+   shortest_path(53,71,Result).
+   removefaultynode(72).
