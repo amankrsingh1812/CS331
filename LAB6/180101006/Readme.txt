@@ -1,4 +1,4 @@
-A sample test case graph "Mazedata.pl" is provided in the folder.
+A sample test case graph "Mazedata.pl" is provided in the folder. The file "graph1.png" is graphical visualization of test case graph.
 
 The file "SampleQueries.txt" consists a list of sample queries.
 
